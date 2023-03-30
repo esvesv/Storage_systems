@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/Sergey/Storage_systems/HW_2/database.db" readonly="0" foreign_keys="" case_sensitive_like="" temp_store="" wal_autocheckpoint="" synchronous=""/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="150"/><column_width id="3" width="2305"/><column_width id="4" width="0"/></tab_structure><tab_browse><current_table name="0,0:"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">SELECT
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/evstr/Storage_systems/HW_2/database.db" readonly="0" foreign_keys="" case_sensitive_like="" temp_store="" wal_autocheckpoint="" synchronous=""/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="150"/><column_width id="3" width="1050"/><column_width id="4" width="0"/></tab_structure><tab_browse><current_table name="0,0:"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">SELECT
 	CASE
 		WHEN TOTAL_AMOUNT &lt;= 50000 THEN 'низкая доходность'
 		WHEN TOTAL_AMOUNT &lt;= 100000 THEN 'средняя доходность'
@@ -8,16 +8,22 @@ FROM
 	(SELECT
 		sum(TX_AMOUNT) OVER (PARTITION by CUSTOMER_ID) as TOTAL_AMOUNT
 	FROM
-		transaction_bd)</sql><sql name="SQL 3">SELECT
-	INCOME_LEVEL,
-	count(CUSTOMER_ID)
+		transaction_bd)</sql><sql name="SQL 3">SELECT
+	INCOME_LEVEL,
+	count(CUSTOMER_ID)
+FROM
+	(SELECT
+		CUSTOMER_ID,
+		INCOME_LEVEL
+	FROM
+		transaction_bd
+	GROUP by
+		CUSTOMER_ID,
+		INCOME_LEVEL)
+GROUP by INCOME_LEVEL</sql><sql name="SQL 4">SELECT
+	date(TX_DATETIME) as DATE,
+	sum(TX_AMOUNT) as TOTAL_AMOUNT
 FROM
-	(SELECT
-		CUSTOMER_ID,
-		INCOME_LEVEL
-	FROM
-		transaction_bd
-	GROUP by
-		CUSTOMER_ID,
-		INCOME_LEVEL)
-GROUP by INCOME_LEVEL</sql><current_tab id="1"/></tab_sql></sqlb_project>
+	transaction_bd
+GROUP by DATE
+ORDER by DAtE</sql><current_tab id="2"/></tab_sql></sqlb_project>
