@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Healthcare" id="Project-1cb0" database="LogicalDesign" >
+	<schema name="INSTANCE" catalogname="evstratov_sergey_vladimirovich_part_2" >
+		<table name="Attendance" prior="Atten" >
+			<column name="Patient_ID" type="INT" jt="4" mandatory="y" />
+			<column name="Health_Camp_ID" type="INT" jt="4" mandatory="y" />
+			<column name="Registration_Date" type="DATE" jt="91" />
+			<column name="Var1" type="INT" jt="4" />
+			<column name="Var2" type="INT" jt="4" />
+			<column name="Var3" type="INT" jt="4" />
+			<column name="Var4" type="INT" jt="4" />
+			<column name="Var5" type="INT" jt="4" />
+			<index name="pk_Attendance" unique="PRIMARY_KEY" >
+				<column name="Patient_ID" />
+				<column name="Health_Camp_ID" />
+			</index>
+		</table>
+		<table name="First_Health_Camp_Attended" prior="Entity" >
+			<column name="Patient_ID" type="INT" jt="4" mandatory="y" />
+			<column name="Health_Camp_ID" type="INT" jt="4" mandatory="y" />
+			<column name="Donation" type="INT" length="0" decimal="6" jt="4" />
+			<column name="Health_Score" type="DECIMAL" length="7" decimal="6" jt="3" />
+			<index name="pk_First_Health_Camp_Attended" unique="PRIMARY_KEY" >
+				<column name="Patient_ID" />
+				<column name="Health_Camp_ID" />
+			</index>
+			<index name="unq_Patient_ID" unique="UNIQUE_INDEX" >
+				<column name="Patient_ID" />
+			</index>
+			<index name="unq_Health_Camp_ID" unique="UNIQUE_INDEX" >
+				<column name="Health_Camp_ID" />
+			</index>
+		</table>
+		<table name="Health_Camp_Detail" prior="Entity" >
+			<comment><![CDATA[End Date of the Health Camp]]></comment>
+			<column name="Health_Camp_ID" type="INT" jt="4" mandatory="y" >
+				<comment><![CDATA[Unique Identifier for each camp. This ID is not sequential in nature and can not be used in modeling]]></comment>
+			</column>
+			<column name="Camp_Start_Date" type="DATE" jt="91" >
+				<comment><![CDATA[Start Date of the Health Camp]]></comment>
+			</column>
+			<column name="Camp_End_Date" type="DATE" jt="91" >
+				<comment><![CDATA[End Date of the Health Camp]]></comment>
+			</column>
+			<column name="Category1" type="VARCHAR" length="10" jt="12" >
+				<comment><![CDATA[Category segmentation of the Health Camp - 1]]></comment>
+			</column>
+			<column name="Category2" type="CHAR" length="1" jt="1" >
+				<comment><![CDATA[Category segmentation of the Health Camp - 2]]></comment>
+			</column>
+			<column name="Category3" type="INT" jt="4" >
+				<comment><![CDATA[Category segmentation of the Health Camp - 3]]></comment>
+			</column>
+			<index name="pk_Health_Camp_Detail" unique="PRIMARY_KEY" >
+				<column name="Health_Camp_ID" />
+			</index>
+			<fk name="fk_Health_Camp_Detail_Attendance" virtual="y" to_schema="evstratov_sergey_vladimirovich_part_2.INSTANCE" to_table="Attendance" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="Health_Camp_ID" pk="Health_Camp_ID" />
+			</fk>
+			<fk name="fk_Health_Camp_Detail_First_Health_Camp_Attended" virtual="y" to_schema="evstratov_sergey_vladimirovich_part_2.INSTANCE" to_table="First_Health_Camp_Attended" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="Health_Camp_ID" pk="Health_Camp_ID" />
+			</fk>
+			<fk name="fk_Health_Camp_Detail_Second_Health_Camp_Attended" virtual="y" to_schema="evstratov_sergey_vladimirovich_part_2.INSTANCE" to_table="Second_Health_Camp_Attended" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="Health_Camp_ID" pk="Health_Camp_ID" />
+			</fk>
+			<fk name="fk_Health_Camp_Detail_Third_Health_Camp_Attended" virtual="y" to_schema="evstratov_sergey_vladimirovich_part_2.INSTANCE" to_table="Third_Health_Camp_Attended" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="Health_Camp_ID" pk="Health_Camp_ID" />
+			</fk>
+		</table>
+		<table name="Patient_Profile" prior="Entity" >
+			<column name="Patient_ID" type="INT" jt="4" mandatory="y" >
+				<comment><![CDATA[Unique Identifier for each patient. This ID is not sequential in nature and can not be used in modeling]]></comment>
+			</column>
+			<column name="Online_Follower" type="INT" jt="4" >
+				<comment><![CDATA[Whether a patient follows MedCamp online or not]]></comment>
+			</column>
+			<column name="LinkedIn_Shared" type="INT" jt="4" >
+				<comment><![CDATA[Whether the patient has shared details of a camp on his LinkedIn id]]></comment>
+			</column>
+			<column name="Twitter_Shared" type="INT" jt="4" >
+				<comment><![CDATA[Whether the patient has tweeted about the health camp]]></comment>
+			</column>
+			<column name="Facebook_Shared" type="INT" jt="4" >
+				<comment><![CDATA[Whether the patient has shared an update about the health camp]]></comment>
+			</column>
+			<column name="Income" type="INT" jt="4" >
+				<comment><![CDATA[Income of the patient]]></comment>
+			</column>
+			<column name="Education_Score" type="DECIMAL" length="11" decimal="8" jt="3" >
+				<comment><![CDATA[Score about education of the patient. Higher would mean better]]></comment>
+			</column>
+			<column name="Age" type="INT" jt="4" >
+				<comment><![CDATA[Age of the patient (as captured at time of registration)]]></comment>
+			</column>
+			<column name="First_Interaction" type="DATE" jt="91" >
+				<comment><![CDATA[Date of first interaction]]></comment>
+			</column>
+			<column name="City_Type" type="CHAR" length="1" jt="1" >
+				<comment><![CDATA[Category of the city]]></comment>
+			</column>
+			<column name="Employer_Category" type="VARCHAR" length="30" jt="12" >
+				<comment><![CDATA[Category of the employer]]></comment>
+			</column>
+			<index name="pk_Patient_Profile" unique="PRIMARY_KEY" >
+				<column name="Patient_ID" />
+			</index>
+			<fk name="fk_Patient_Profile_Attendance" virtual="y" to_schema="evstratov_sergey_vladimirovich_part_2.INSTANCE" to_table="Attendance" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="Patient_ID" pk="Patient_ID" />
+			</fk>
+			<fk name="fk_Patient_Profile_First_Health_Camp_Attended" virtual="y" to_schema="evstratov_sergey_vladimirovich_part_2.INSTANCE" to_table="First_Health_Camp_Attended" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="Patient_ID" pk="Patient_ID" />
+			</fk>
+			<fk name="fk_Patient_Profile_Second_Health_Camp_Attended" virtual="y" to_schema="evstratov_sergey_vladimirovich_part_2.INSTANCE" to_table="Second_Health_Camp_Attended" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="Patient_ID" pk="Patient_ID" />
+			</fk>
+			<fk name="fk_Patient_Profile_Third_Health_Camp_Attended" virtual="y" to_schema="evstratov_sergey_vladimirovich_part_2.INSTANCE" to_table="Third_Health_Camp_Attended" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="Patient_ID" pk="Patient_ID" />
+			</fk>
+		</table>
+		<table name="Second_Health_Camp_Attended" prior="Entity" >
+			<column name="Patient_ID" type="INT" jt="4" mandatory="y" />
+			<column name="Health_Camp_ID" type="INT" jt="4" mandatory="y" />
+			<column name="Health_Score" type="DECIMAL" length="7" decimal="6" jt="3" />
+			<index name="pk_Second_Health_Camp_Attended" unique="PRIMARY_KEY" >
+				<column name="Patient_ID" />
+				<column name="Health_Camp_ID" />
+			</index>
+			<index name="unq_Patient_ID" unique="UNIQUE_INDEX" >
+				<column name="Patient_ID" />
+			</index>
+			<index name="unq_Health_Camp_ID" unique="UNIQUE_INDEX" >
+				<column name="Health_Camp_ID" />
+			</index>
+		</table>
+		<table name="Third_Health_Camp_Attended" prior="Entity" >
+			<column name="Patient_ID" type="INT" jt="4" mandatory="y" />
+			<column name="Health_Camp_ID" type="INT" jt="4" mandatory="y" />
+			<column name="Number_of_stall_visited" type="INT" jt="4" />
+			<column name="Last_Stall_Visited_Number" type="INT" jt="4" />
+			<index name="pk_Third_Health_Camp_Attended" unique="PRIMARY_KEY" >
+				<column name="Patient_ID" />
+				<column name="Health_Camp_ID" />
+			</index>
+			<index name="unq_Patient_ID" unique="UNIQUE_INDEX" >
+				<column name="Patient_ID" />
+			</index>
+			<index name="unq_Health_Camp_ID" unique="UNIQUE_INDEX" >
+				<column name="Health_Camp_ID" />
+			</index>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-1d7c" show_column_type="y" show_relation="columns" >
+		<entity schema="evstratov_sergey_vladimirovich_part_2.INSTANCE" name="Attendance" color="C1D8EE" x="48" y="80" />
+		<entity schema="evstratov_sergey_vladimirovich_part_2.INSTANCE" name="First_Health_Camp_Attended" color="C1D8EE" x="288" y="80" />
+		<entity schema="evstratov_sergey_vladimirovich_part_2.INSTANCE" name="Health_Camp_Detail" color="C1D8EE" x="368" y="432" />
+		<entity schema="evstratov_sergey_vladimirovich_part_2.INSTANCE" name="Patient_Profile" color="C1D8EE" x="1424" y="48" />
+		<entity schema="evstratov_sergey_vladimirovich_part_2.INSTANCE" name="Second_Health_Camp_Attended" color="C1D8EE" x="592" y="144" />
+		<entity schema="evstratov_sergey_vladimirovich_part_2.INSTANCE" name="Third_Health_Camp_Attended" color="C1D8EE" x="976" y="192" />
+	</layout>
+</project>

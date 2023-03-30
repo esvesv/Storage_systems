@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="HW_1_part_1" id="Project-2209" database="LogicalDesign" >
+	<schema name="INSTANCE" catalogname="HW_1_part_1" >
+		<table name="Departments" prior="Entity" >
+			<column name="department_ID" type="INT" jt="4" mandatory="y" />
+			<column name="department_name" type="VARCHAR" length="100" jt="12" />
+			<index name="pk_Departments" unique="PRIMARY_KEY" >
+				<column name="department_ID" />
+			</index>
+			<fk name="fk_Departments_Positions" virtual="y" to_schema="HW_1_part_1.INSTANCE" to_table="Positions" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="department_ID" pk="department_ID" />
+			</fk>
+		</table>
+		<table name="Employees" prior="employees" >
+			<column name="employee_ID" type="INT" jt="4" mandatory="y" />
+			<column name="employee_name" type="VARCHAR" length="100" jt="12" />
+			<column name="position_ID" type="INT" jt="4" />
+			<column name="person_ID" prior="individual" type="INT" jt="4" />
+			<column name="supervisor_ID" type="INT" jt="4" />
+			<column name="travel_required" type="BOOLEAN" jt="-7" />
+			<index name="pk_Employees" unique="PRIMARY_KEY" >
+				<column name="employee_ID" />
+			</index>
+			<index name="unq_position_ID" unique="UNIQUE_INDEX" >
+				<column name="position_ID" />
+			</index>
+			<index name="unq_individual" unique="UNIQUE_INDEX" >
+				<column name="person_ID" />
+			</index>
+			<index name="unq_supervisor_ID" unique="UNIQUE_INDEX" >
+				<column name="supervisor_ID" />
+			</index>
+			<fk name="fk_Employees_Registr" virtual="y" to_schema="HW_1_part_1.INSTANCE" to_table="Registr" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="employee_ID" pk="employee_ID" />
+			</fk>
+		</table>
+		<table name="Persons" prior="Individuals" >
+			<column name="person_ID" prior="individual_ID" type="INT" jt="4" mandatory="y" />
+			<column name="person_name" prior="individual_name" type="VARCHAR" length="100" jt="12" />
+			<index name="pk_Individuals" unique="PRIMARY_KEY" >
+				<column name="person_ID" />
+			</index>
+			<fk name="fk_Individuals_Employees" virtual="y" to_schema="HW_1_part_1.INSTANCE" to_table="Employees" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="person_ID" pk="person_ID" />
+			</fk>
+			<fk name="fk_Persons_Employees" virtual="y" to_schema="HW_1_part_1.INSTANCE" to_table="Employees" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="person_ID" pk="supervisor_ID" />
+			</fk>
+		</table>
+		<table name="Positions" prior="Entity" >
+			<column name="position_ID" type="INT" jt="4" mandatory="y" />
+			<column name="position_name" prior="positon_name" type="VARCHAR" length="100" jt="12" />
+			<column name="department_ID" type="INT" jt="4" />
+			<index name="pk_Positions" unique="PRIMARY_KEY" >
+				<column name="position_ID" />
+			</index>
+			<index name="unq_department_ID" unique="UNIQUE_INDEX" >
+				<column name="department_ID" />
+			</index>
+			<fk name="fk_Positions_Employees" virtual="y" to_schema="HW_1_part_1.INSTANCE" to_table="Employees" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="position_ID" pk="position_ID" />
+			</fk>
+		</table>
+		<table name="Projects" prior="Entity" >
+			<column name="project_ID" type="INT" jt="4" mandatory="y" />
+			<column name="project_name" type="VARCHAR" length="100" jt="12" />
+			<index name="pk_Projects" unique="PRIMARY_KEY" >
+				<column name="project_ID" />
+			</index>
+			<fk name="fk_Projects_Registr" virtual="y" to_schema="HW_1_part_1.INSTANCE" to_table="Registr" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="project_ID" pk="project_ID" />
+			</fk>
+		</table>
+		<table name="Registr" prior="Regi" >
+			<column name="redistr_ID" type="INT" jt="4" mandatory="y" />
+			<column name="employee_ID" prior="employee" type="INT" jt="4" />
+			<column name="project_ID" prior="project" type="INT" jt="4" />
+			<index name="pk_Registr" unique="PRIMARY_KEY" >
+				<column name="redistr_ID" />
+			</index>
+			<index name="unq_employee" unique="UNIQUE_INDEX" >
+				<column name="employee_ID" />
+			</index>
+			<index name="unq_project" unique="UNIQUE_INDEX" >
+				<column name="project_ID" />
+			</index>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-25bf" show_column_type="y" show_relation="columns" >
+		<entity schema="HW_1_part_1.INSTANCE" name="Departments" color="C1D8EE" x="768" y="304" />
+		<entity schema="HW_1_part_1.INSTANCE" name="Employees" color="C1D8EE" x="400" y="48" />
+		<entity schema="HW_1_part_1.INSTANCE" name="Persons" color="C1D8EE" x="784" y="48" />
+		<entity schema="HW_1_part_1.INSTANCE" name="Positions" color="C1D8EE" x="416" y="304" />
+		<entity schema="HW_1_part_1.INSTANCE" name="Projects" color="C1D8EE" x="48" y="304" />
+		<entity schema="HW_1_part_1.INSTANCE" name="Registr" color="C1D8EE" x="48" y="48" />
+	</layout>
+</project>

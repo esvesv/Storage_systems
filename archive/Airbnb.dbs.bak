@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Airbnb" id="Project-21f0" database="LogicalDesign" >
+	<schema name="INSTANCE" catalogname="Airbnb" >
+		<table name="City" prior="Entity" >
+			<column name="ID_city" type="INT" jt="4" mandatory="y" />
+			<column name="city_name" type="VARCHAR" length="100" jt="12" />
+			<index name="pk_City" unique="PRIMARY_KEY" >
+				<column name="ID_city" />
+			</index>
+			<fk name="fk_City_Rooms" virtual="y" to_schema="Airbnb.INSTANCE" to_table="Rooms" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="ID_city" pk="ID_city" />
+			</fk>
+		</table>
+		<table name="Raitings" prior="Var_features" >
+			<column name="date" type="DATE" jt="91" mandatory="y" />
+			<column name="ID_room" type="INT" jt="4" mandatory="y" />
+			<column name="cleanliness_rating" type="INT" jt="4" mandatory="y" />
+			<column name="guest_satisfaction_overall" type="INT" jt="4" mandatory="y" />
+			<column name="attr_index" type="DECIMAL" length="0" decimal="6" jt="3" />
+			<column name="attr_index_norm" type="DECIMAL" length="0" decimal="6" jt="3" />
+			<column name="rest_index" type="DECIMAL" length="0" decimal="6" jt="3" />
+			<column name="rest_index_norm" type="DECIMAL" length="0" decimal="6" jt="3" />
+			<index name="pk_Var_features" unique="PRIMARY_KEY" >
+				<column name="date" />
+				<column name="ID_room" />
+			</index>
+			<index name="unq_ID_room" unique="UNIQUE_INDEX" >
+				<column name="ID_room" />
+			</index>
+		</table>
+		<table name="Real_Sum" prior="Real_" >
+			<column name="date_start" type="DATE" jt="91" mandatory="y" />
+			<column name="date_end" type="DATE" jt="91" mandatory="y" />
+			<column name="ID_room" type="INT" jt="4" mandatory="y" />
+			<column name="price" type="MONEY" jt="3" mandatory="y" />
+			<index name="pk_Real_Sum" unique="PRIMARY_KEY" >
+				<column name="date_start" />
+				<column name="date_end" />
+				<column name="ID_room" />
+			</index>
+			<index name="unq_ID_room" unique="UNIQUE_INDEX" >
+				<column name="ID_room" />
+			</index>
+		</table>
+		<table name="Room_types" prior="Entity" >
+			<column name="ID_room_type" type="INT" jt="4" mandatory="y" />
+			<column name="name_room_type" type="VARCHAR" length="100" jt="12" />
+			<index name="pk_Entity" unique="PRIMARY_KEY" >
+				<column name="ID_room_type" />
+			</index>
+			<fk name="fk_Entity_Rooms" virtual="y" to_schema="Airbnb.INSTANCE" to_table="Rooms" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="ID_room_type" pk="ID_room_type" />
+			</fk>
+		</table>
+		<table name="Rooms" prior="Entity_0" >
+			<column name="ID_room" type="INT" jt="4" mandatory="y" />
+			<column name="ID_city" type="INT" jt="4" mandatory="y" />
+			<column name="ID_room_type" type="INT" jt="4" mandatory="y" />
+			<column name="room_shared" type="BOOLEAN" jt="-7" mandatory="y" />
+			<column name="room_private" type="BOOLEAN" jt="-7" mandatory="y" />
+			<column name="preson_capacity" type="INT" jt="4" mandatory="y" />
+			<column name="host_is_superhost" type="BOOLEAN" jt="-7" mandatory="y" />
+			<column name="multi" type="BOOLEAN" jt="-7" mandatory="y" />
+			<column name="biz" type="BOOLEAN" jt="-7" mandatory="y" />
+			<column name="bedrooms" type="INT" jt="4" mandatory="y" />
+			<column name="dist" type="DECIMAL" length="0" decimal="6" jt="3" />
+			<column name="metro_dist" type="DECIMAL" length="0" decimal="6" jt="3" />
+			<column name="lng" type="DECIMAL" length="3" decimal="6" jt="3" />
+			<column name="lat" type="DECIMAL" length="3" decimal="6" jt="3" />
+			<index name="pk_Rooms" unique="PRIMARY_KEY" >
+				<column name="ID_room" />
+			</index>
+			<index name="unq_ID_city" unique="UNIQUE_INDEX" >
+				<column name="ID_city" />
+			</index>
+			<index name="unq_ID_room_type" unique="UNIQUE_INDEX" >
+				<column name="ID_room_type" />
+			</index>
+			<fk name="fk_Rooms_Real_Sum" virtual="y" to_schema="Airbnb.INSTANCE" to_table="Real_Sum" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="ID_room" pk="ID_room" />
+			</fk>
+			<fk name="fk_Rooms_Raitings" virtual="y" to_schema="Airbnb.INSTANCE" to_table="Raitings" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="ID_room" pk="ID_room" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-454" show_relation="columns" >
+		<entity schema="Airbnb.INSTANCE" name="City" color="C1D8EE" x="48" y="48" />
+		<entity schema="Airbnb.INSTANCE" name="Raitings" color="C1D8EE" x="1008" y="48" />
+		<entity schema="Airbnb.INSTANCE" name="Real_Sum" color="C1D8EE" x="800" y="48" />
+		<entity schema="Airbnb.INSTANCE" name="Room_types" color="C1D8EE" x="528" y="48" />
+		<entity schema="Airbnb.INSTANCE" name="Rooms" color="C1D8EE" x="272" y="48" />
+	</layout>
+</project>

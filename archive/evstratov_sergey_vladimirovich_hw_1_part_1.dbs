@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="HW_1_part_1" id="Project-1f53" database="LogicalDesign" >
+	<schema name="INSTANCE" catalogname="HW_1_part_1" >
+		<table name="Employees" prior="Entity" >
+			<column name="employee" type="VARCHAR" length="30" jt="12" mandatory="y" />
+			<column name="travel_required" type="BOOLEAN" jt="-7" />
+			<column name="position" type="VARCHAR" length="30" jt="12" mandatory="y" />
+			<index name="pk_Employees" unique="PRIMARY_KEY" >
+				<column name="employee" />
+			</index>
+			<index name="unq_position" unique="UNIQUE_INDEX" >
+				<column name="position" />
+			</index>
+			<fk name="fk_Employees_Regist" virtual="y" to_schema="HW_1_part_1.INSTANCE" to_table="Registr" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="employee" pk="employee" />
+			</fk>
+		</table>
+		<table name="Positions" prior="Entity" >
+			<column name="position" type="VARCHAR" length="30" jt="12" mandatory="y" />
+			<column name="department" type="VARCHAR" length="30" jt="12" />
+			<column name="supervisor" type="VARCHAR" length="30" jt="12" />
+			<index name="pk_Positions" unique="PRIMARY_KEY" >
+				<column name="position" />
+			</index>
+			<fk name="fk_Positions_Employees" virtual="y" to_schema="HW_1_part_1.INSTANCE" to_table="Employees" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="position" pk="position" />
+			</fk>
+		</table>
+		<table name="Registr" prior="Regist" >
+			<column name="registr_id" prior="ID" type="INT" jt="4" mandatory="y" />
+			<column name="employee" prior="Employee" type="VARCHAR" length="30" jt="12" mandatory="y" />
+			<column name="project" prior="Project" type="VARCHAR" length="30" jt="12" mandatory="y" />
+			<index name="pk_Regist" unique="PRIMARY_KEY" >
+				<column name="registr_id" />
+			</index>
+			<index name="unq_employee" unique="UNIQUE_INDEX" >
+				<column name="employee" />
+			</index>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-213a" show_column_type="y" show_relation="columns" >
+		<entity schema="HW_1_part_1.INSTANCE" name="Employees" color="C1D8EE" x="320" y="48" />
+		<entity schema="HW_1_part_1.INSTANCE" name="Positions" color="C1D8EE" x="592" y="48" />
+		<entity schema="HW_1_part_1.INSTANCE" name="Registr" color="C1D8EE" x="48" y="48" />
+	</layout>
+</project>

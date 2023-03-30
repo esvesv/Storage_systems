@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="airbnb" id="Project-125" database="LogicalDesign" >
+	<schema name="INSTANCE" catalogname="airbnb" >
+		<table name="Booking" prior="booking" >
+			<column name="ID_booking" type="INT" jt="4" mandatory="y" />
+			<column name="date_booking" type="DATETIME" jt="93" mandatory="y" />
+			<column name="date_in" type="DATE" jt="91" mandatory="y" />
+			<column name="date_out" type="DATE" jt="91" mandatory="y" />
+			<column name="ID_room" type="INT" jt="4" mandatory="y" />
+			<column name="ID_customer" type="INT" jt="4" mandatory="y" />
+			<index name="pk_booking" unique="PRIMARY_KEY" >
+				<column name="ID_booking" />
+			</index>
+			<index name="unq_ID_room" unique="UNIQUE_INDEX" >
+				<column name="ID_room" />
+			</index>
+			<index name="unq_ID_customer" unique="UNIQUE_INDEX" >
+				<column name="ID_customer" />
+			</index>
+		</table>
+		<table name="City" prior="Entity" >
+			<column name="ID_city" type="INT" jt="4" mandatory="y" />
+			<column name="Name_city" type="VARCHAR" length="100" jt="12" mandatory="y" />
+			<column name="ID_sight" type="INT" jt="4" />
+			<index name="pk_City" unique="PRIMARY_KEY" >
+				<column name="ID_city" />
+			</index>
+			<index name="unq_ID_sight" unique="UNIQUE_INDEX" >
+				<column name="ID_sight" />
+			</index>
+		</table>
+		<table name="Customers" prior="Entity" >
+			<column name="ID_customer" type="INT" jt="4" mandatory="y" />
+			<column name="Name_customer" type="VARCHAR" length="100" jt="12" mandatory="y" />
+			<index name="pk" unique="PRIMARY_KEY" >
+				<column name="ID_customer" />
+			</index>
+			<fk name="fk_Customers_booking" virtual="y" to_schema="airbnb.INSTANCE" to_table="Booking" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="ID_customer" pk="ID_customer" />
+				<comment><![CDATA[один ко многим]]></comment>
+			</fk>
+		</table>
+		<table name="Hosts" prior="Entity" >
+			<column name="ID_host" type="INT" jt="4" mandatory="y" />
+			<column name="Name_host" type="VARCHAR" length="100" jt="12" />
+			<index name="pk_Hosts" unique="PRIMARY_KEY" >
+				<column name="ID_host" />
+			</index>
+			<fk name="fk_Hosts_Rooms" virtual="y" to_schema="airbnb.INSTANCE" to_table="Rooms" type="ManyToMany" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="ID_host" pk="ID_host" />
+				<comment><![CDATA[много ко многим]]></comment>
+			</fk>
+		</table>
+		<table name="Rooms" prior="Entity" >
+			<column name="ID_room" type="INT" jt="4" mandatory="y" />
+			<column name="ID_host" type="INT" jt="4" mandatory="y" />
+			<column name="ID_city" type="INT" jt="4" mandatory="y" />
+			<column name="Address" type="VARCHAR" length="100" jt="12" />
+			<column name="no_room" type="VARCHAR" length="10" jt="12" />
+			<index name="pk_Rooms" unique="PRIMARY_KEY" >
+				<column name="ID_room" />
+			</index>
+			<index name="unq_ID_city" unique="UNIQUE_INDEX" >
+				<column name="ID_city" />
+			</index>
+			<fk name="fk_Rooms_booking" virtual="y" to_schema="airbnb.INSTANCE" to_table="Booking" type="Identifying" mandatory="y" cardinality="One" range_from="0" range_to="0" >
+				<fk_column name="ID_room" pk="ID_room" />
+				<comment><![CDATA[один ко многим]]></comment>
+			</fk>
+			<fk name="fk_Rooms_City" virtual="y" to_schema="airbnb.INSTANCE" to_table="City" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="ID_city" pk="ID_city" />
+				<comment><![CDATA[один ко многим]]></comment>
+			</fk>
+		</table>
+		<table name="Sights" prior="S" >
+			<column name="ID_sight" type="INT" jt="4" mandatory="y" />
+			<column name="Name_sight" type="VARCHAR" length="100" jt="12" mandatory="y" />
+			<column name="Info" type="VARCHAR" length="300" jt="12" />
+			<index name="pk_Sights" unique="PRIMARY_KEY" >
+				<column name="ID_sight" />
+			</index>
+			<fk name="fk_Sights_City" virtual="y" to_schema="airbnb.INSTANCE" to_table="City" type="Identifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="ID_sight" pk="ID_sight" />
+				<comment><![CDATA[один ко многим]]></comment>
+			</fk>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-1150" show_relation="columns" >
+		<entity schema="airbnb.INSTANCE" name="Booking" color="C1D8EE" x="48" y="48" />
+		<entity schema="airbnb.INSTANCE" name="City" color="C1D8EE" x="784" y="48" />
+		<entity schema="airbnb.INSTANCE" name="Customers" color="C1D8EE" x="576" y="48" />
+		<entity schema="airbnb.INSTANCE" name="Hosts" color="C1D8EE" x="1152" y="48" />
+		<entity schema="airbnb.INSTANCE" name="Rooms" color="C1D8EE" x="320" y="64" />
+		<entity schema="airbnb.INSTANCE" name="Sights" color="C1D8EE" x="976" y="48" />
+	</layout>
+</project>
