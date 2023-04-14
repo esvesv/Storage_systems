@@ -34,7 +34,79 @@ FROM
 WHERE CUSTOMER_ID in actual_cusomers
 GROUP by CUSTOMER_ID
 HAVING MAX_DELTA_BETWEEN_TRANSACTIONS &gt; 35
-</sql><sql name="SQL 5">WITH
+</sql><sql name="SQL 5">WITH
+	actual_cusomers as
+		(SELECT
+			CLIENT_ID
+		FROM
+			customer_bd
+		WHERE END_DT &gt;= '2023-05-01'),
+		
+	agregate_tx_amount as
+		(SELECT
+			CUSTOMER_ID,
+			max(TX_AMOUNT) over (PARTITION by CUSTOMER_ID) as MAX_TX_AMOUNT,
+			min(TX_AMOUNT) over (PARTITION by CUSTOMER_ID) as MIN_TX_AMOUNT
+		FROM
+			transaction_bd
+		WHERE CUSTOMER_ID in actual_cusomers
+		GROUP by CUSTOMER_ID)
+		
+SELECT
+	*
+FROM
+	agregate_tx_amount
+--GROUP by CUSTOMER_ID
+--WHERE MAX_TX_AMOUNT &gt; 50000</sql><sql name="SQL 6">WITH
+	actual_cusomers as
+		(SELECT
+			CLIENT_ID
+		FROM
+			customer_bd
+		WHERE END_DT &gt;= '2023-05-01')
+
+SELECT
+	CUSTOMER_ID,
+	max(TX_AMOUNT) as MAX_TX_AMOUNT,
+	min(TX_AMOUNT) as MIN_TX_AMOUNT
+FROM
+	transaction_bd
+WHERE CUSTOMER_ID in actual_cusomers
+GROUP by CUSTOMER_ID
+HAVING MAX_TX_AMOUNT &gt; 50000</sql><sql name="SQL 6">SELECT
+	*,
+	CASE
+		WHEN time(TX_DATETIME) &lt;= '11:59:59'
+		THEN 'AM'
+		ELSE 'PM'
+	END as AM_PM
+FROM
+	transaction_bd</sql><sql name="SQL 7">WITH
+	actual_cusomers as
+		(SELECT
+			CLIENT_ID
+		FROM
+			customer_bd
+		WHERE END_DT &gt;= '2023-05-01'),
+
+
+	am_pm as
+		(SELECT
+			CUSTOMER_ID,
+			count(TERMINAL_ID) FILTER (WHERE time(TX_DATETIME) &lt;= '11:59:59') OVER (PARTITION by CUSTOMER_ID) as AM,
+			count(TERMINAL_ID) FILTER (WHERE time(TX_DATETIME) &gt; '11:59:59') OVER (PARTITION by CUSTOMER_ID) as PM
+		FROM
+			transaction_bd
+		WHERE CUSTOMER_ID in actual_cusomers)
+		
+SELECT
+	*
+FROM
+	am_pm
+GROUP by CUSTOMER_ID
+HAVING AM &gt; PM
+ORDER by CUSTOMER_ID DESC
+LIMIT 10</sql><sql name="SQL 8">WITH
 	actual_cusomers as
 		(SELECT
 			CLIENT_ID
@@ -42,35 +114,43 @@ HAVING MAX_DELTA_BETWEEN_TRANSACTIONS &gt; 35
 			customer_bd
 		WHERE END_DT &gt;= '2023-05-01'),
 		
-	agregate_tx_amount as
+	max_tx_amount as
 		(SELECT
 			CUSTOMER_ID,
-			max(TX_AMOUNT) over (PARTITION by CUSTOMER_ID) as MAX_TX_AMOUNT,
-			min(TX_AMOUNT) over (PARTITION by CUSTOMER_ID) as MIN_TX_AMOUNT
+			TX_AMOUNT,
+			TX_DATETIME,
+			max(TX_AMOUNT) OVER (PARTITION by CUSTOMER_ID) MAX_TX_AMOUNT
 		FROM
 			transaction_bd
-		WHERE CUSTOMER_ID in actual_cusomers
-		GROUP by CUSTOMER_ID)
+		WHERE CUSTOMER_ID in actual_cusomers)
 		
 SELECT
-	*
-FROM
-	agregate_tx_amount
---GROUP by CUSTOMER_ID
---WHERE MAX_TX_AMOUNT &gt; 50000</sql><sql name="SQL 6">WITH
-	actual_cusomers as
-		(SELECT
-			CLIENT_ID
-		FROM
-			customer_bd
-		WHERE END_DT &gt;= '2023-05-01')
-
-SELECT
 	CUSTOMER_ID,
-	max(TX_AMOUNT) as MAX_TX_AMOUNT,
-	min(TX_AMOUNT) as MIN_TX_AMOUNT
+	date(TX_DATETIME) as DATE,
+	TX_AMOUNT
+FROM
+	max_tx_amount
+WHERE TX_AMOUNT = MAX_TX_AMOUNT</sql><sql name="SQL 9">SELECT
+	TX_DATETIME,
+	TX_AMOUNT,
+	CUME_DIST_AMOUNT,
+	sum(TX_AMOUNT) OVER (PARTITION by date(TX_DATETIME)) as SUM_TX_AMOUNT,
+	sum(CUME_DIST_AMOUNT) OVER () as SUM_CUME_DIST
+FROM
+
+
+
+(SELECT
+	TX_DATETIME,
+	TX_AMOUNT,
+	cume_dist() over (PARTITION by date(TX_DATETIME) ORDER by TX_DATETIME) as CUME_DIST_AMOUNT
 FROM
 	transaction_bd
-WHERE CUSTOMER_ID in actual_cusomers
-GROUP by CUSTOMER_ID
-HAVING MAX_TX_AMOUNT &gt; 50000</sql><current_tab id="2"/></tab_sql></sqlb_project>
+--ORDER by TX_DATETIME
+)</sql><sql name="SQL 10">SELECT
+	TX_DATETIME,
+	TX_AMOUNT,
+	cume_dist() over (PARTITION by date(TX_DATETIME) ORDER by TX_AMOUNT) as CUME_DIST_AMOUNT
+FROM
+	transaction_bd
+</sql><current_tab id="8"/></tab_sql></sqlb_project>
